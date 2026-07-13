@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: gheverhan-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - gheverhan-network
+    depends_on:
+      db:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:alpine
+    container_name: gheverhan-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - gheverhan-network
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8.0
+    container_name: gheverhan-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: gheverhan
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_USER: gheverhan
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - gheverhan-db-data:/var/lib/mysql
+    networks:
+      - gheverhan-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  node:
+    image: node:20-alpine
+    container_name: gheverhan-node
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    networks:
+      - gheverhan-network
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+
+networks:
+  gheverhan-network:
+    driver: bridge
+
+volumes:
+  gheverhan-db-data:
+    driver: local

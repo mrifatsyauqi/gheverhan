@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        @apply bg-white text-primary;
+    }
+
+    /* Smooth scrolling */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-surface;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-gray-300 rounded-full;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-gray-400;
+    }
+}
+
+@layer components {
+    /* Pill button base */
+    .pill-btn {
+        @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium
+               border border-gray-200 rounded-full cursor-pointer
+               transition-all duration-200 ease-in-out
+               hover:border-primary hover:bg-primary hover:text-white;
+    }
+
+    .pill-btn.active {
+        @apply border-primary bg-primary text-white;
+    }
+
+    .pill-btn.disabled {
+        @apply opacity-40 cursor-not-allowed line-through
+               hover:border-gray-200 hover:bg-transparent hover:text-primary;
+    }
+
+    /* Color swatch */
+    .color-swatch {
+        @apply w-8 h-8 rounded-full cursor-pointer border-2 border-transparent
+               ring-2 ring-transparent ring-offset-2
+               transition-all duration-200 ease-in-out;
+    }
+
+    .color-swatch.active {
+        @apply ring-primary;
+    }
+
+    /* Card hover effect */
+    .card-hover {
+        @apply transition-all duration-300 ease-in-out;
+    }
+
+    .card-hover:hover {
+        @apply shadow-card-hover -translate-y-1;
+    }
+
+    /* Stepper line */
+    .stepper-line {
+        @apply absolute left-[15px] top-[30px] w-0.5 bg-gray-200;
+        height: calc(100% - 30px);
+    }
+
+    .stepper-line.completed {
+        @apply bg-primary;
+    }
+
+    /* Mobile bottom nav safe area */
+    .mobile-nav-spacer {
+        @apply h-20 md:h-0;
+    }
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    /* Hide scrollbar for horizontal scroll */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
