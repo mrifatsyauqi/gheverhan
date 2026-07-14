@@ -35,17 +35,17 @@
         @endif
     </div>
 
-    <div class="p-3 flex-1 flex flex-col">
+    <div class="p-2.5 flex-1 flex flex-col">
         {{-- Name --}}
         <a href="{{ route('products.show', $product->slug) }}">
-            <h3 class="text-xs sm:text-sm font-semibold text-primary leading-tight mb-1 truncate group-hover:underline decoration-1 underline-offset-2">
+            <h3 class="text-xs sm:text-sm font-semibold text-primary leading-tight mb-0.5 truncate group-hover:underline decoration-1 underline-offset-2">
                 {{ $product->name }}
             </h3>
         </a>
 
         {{-- Rating --}}
         @if($product->rating > 0)
-            <div class="flex items-center gap-1 mb-2">
+            <div class="flex items-center gap-1 mb-1">
                 <x-rating :value="$product->rating" size="xs" />
                 <span class="text-[9px] text-gray-400">({{ $product->rating_count }})</span>
             </div>
@@ -54,11 +54,11 @@
         <div class="flex-1"></div>
 
         {{-- Price & Cart Button Row --}}
-        <div class="flex items-center justify-between mt-2">
-            <div class="flex flex-col">
+        <div class="flex items-center justify-between mt-1">
+            <div class="flex flex-col leading-tight">
                 <span class="text-xs sm:text-sm font-extrabold text-primary">{{ $product->formatted_price }}</span>
                 @if($product->formatted_compare_price)
-                    <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">{{ $product->formatted_compare_price }}</span>
+                    <span class="text-[9px] text-gray-400 line-through">{{ $product->formatted_compare_price }}</span>
                 @endif
             </div>
 
@@ -67,8 +67,8 @@
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                 <input type="hidden" name="quantity" value="1">
-                <button type="submit" class="bg-primary text-white w-8 h-8 rounded-md flex items-center justify-center hover:bg-primary-dark transition-colors" aria-label="Tambah ke keranjang">
-                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <button type="submit" class="bg-primary text-white w-7 h-7 rounded-md flex items-center justify-center hover:bg-primary-dark transition-colors" aria-label="Tambah ke keranjang">
+                    <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                 </button>
@@ -76,12 +76,12 @@
         </div>
 
         {{-- Desktop Cart Button (Full Width) --}}
-        <form action="{{ route('cart.add') }}" method="POST" class="hidden sm:block mt-3">
+        <form action="{{ route('cart.add') }}" method="POST" class="hidden sm:block mt-2">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
             <input type="hidden" name="quantity" value="1">
-            <button type="submit" class="w-full bg-primary text-white text-[10px] sm:text-xs font-bold py-2 sm:py-2.5 rounded-md flex items-center justify-center gap-1.5 hover:bg-primary-dark transition-colors">
-                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <button type="submit" class="w-full bg-primary text-white text-[10px] sm:text-xs font-bold py-1.5 sm:py-2 rounded-md flex items-center justify-center gap-1.5 hover:bg-primary-dark transition-colors">
+                <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
                 Keranjang
