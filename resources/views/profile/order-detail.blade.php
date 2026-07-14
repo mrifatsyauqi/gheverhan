@@ -81,7 +81,27 @@
                 @if($order->shipping_address_snapshot || $order->address)
                 <div class="border border-gray-100 rounded-xl p-5 mb-6">
                     <h3 class="text-sm font-semibold text-primary mb-2">Alamat Pengiriman</h3>
-                    <p class="text-sm text-gray-600">{{ $order->shipping_address_snapshot ?? $order->address?->formatted_address }}</p>
+                    @php
+                        $addressData = null;
+                        if ($order->shipping_address_snapshot) {
+                            $decoded = json_decode($order->shipping_address_snapshot);
+                            if (json_last_error() === JSON_ERROR_NONE && is_object($decoded)) {
+                                $addressData = $decoded;
+                            }
+                        }
+                    @endphp
+
+                    @if($addressData)
+                        <p class="font-medium text-gray-900 mb-1">{{ $addressData->recipient_name }}</p>
+                        <p class="text-sm text-gray-600 mb-1">{{ $addressData->phone }}</p>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            {{ $addressData->street_address }}<br>
+                            {{ $addressData->district }}, {{ $addressData->city }}<br>
+                            {{ $addressData->province }} {{ $addressData->postal_code }}
+                        </p>
+                    @else
+                        <p class="text-sm text-gray-600">{{ $order->shipping_address_snapshot ?? $order->address?->formatted_address }}</p>
+                    @endif
                 </div>
                 @endif
 
