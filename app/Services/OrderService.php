@@ -59,11 +59,19 @@ class OrderService
                     'subtotal' => $cartItem->price * $cartItem->quantity,
                 ]);
 
-                // Decrease stock
+                // Decrease stock with lockForUpdate
                 if ($cartItem->variant) {
-                    $cartItem->variant->decrement('stock', $cartItem->quantity);
+                    $variant = \App\Models\ProductVariant::where('id', $cartItem->product_variant_id)->lockForUpdate()->first();
+                    if (!$variant || $variant->stock < $cartItem->quantity) {
+                        throw new \RuntimeException("Stok varian {$cartItem->variant_name} tidak mencukupi.");
+                    }
+                    $variant->decrement('stock', $cartItem->quantity);
                 } else {
-                    $cartItem->product->decrement('stock', $cartItem->quantity);
+                    $product = \App\Models\Product::where('id', $cartItem->product_id)->lockForUpdate()->first();
+                    if (!$product || $product->stock < $cartItem->quantity) {
+                        throw new \RuntimeException("Stok produk {$cartItem->product_name} tidak mencukupi.");
+                    }
+                    $product->decrement('stock', $cartItem->quantity);
                 }
             }
 

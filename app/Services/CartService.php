@@ -49,6 +49,13 @@ class CartService
 
     public function updateQuantity(int $cartItemId, int $quantity): void
     {
+        $cart = $this->getCart();
+        $cartItem = $cart->items()->where('id', $cartItemId)->first();
+        
+        if (!$cartItem) {
+            throw new \RuntimeException('Item tidak valid atau tidak ditemukan di keranjang Anda.');
+        }
+
         if ($quantity < 1) {
             $this->cartRepository->removeItem($cartItemId);
             return;
@@ -59,6 +66,13 @@ class CartService
 
     public function removeItem(int $cartItemId): void
     {
+        $cart = $this->getCart();
+        $cartItem = $cart->items()->where('id', $cartItemId)->first();
+        
+        if (!$cartItem) {
+            throw new \RuntimeException('Item tidak valid atau tidak ditemukan di keranjang Anda.');
+        }
+
         $this->cartRepository->removeItem($cartItemId);
     }
 

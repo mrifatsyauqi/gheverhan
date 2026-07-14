@@ -14,9 +14,15 @@ class PlaceOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'address_id' => ['required', 'integer', 'exists:addresses,id'],
-            'shipping_method' => ['required', 'string', 'in:jne,jnt,sicepat'],
-            'payment_method' => ['required', 'string', 'in:bank_transfer,ewallet,cod'],
+            'address_id' => [
+                'required', 
+                'integer', 
+                \Illuminate\Validation\Rule::exists('addresses', 'id')->where(function ($query) {
+                    $query->where('user_id', auth()->id());
+                })
+            ],
+            'shipping_method' => ['required', 'string', \Illuminate\Validation\Rule::exists('shipping_methods', 'code')],
+            'payment_method' => ['required', 'string', \Illuminate\Validation\Rule::exists('payment_methods', 'code')],
             'notes' => ['nullable', 'string', 'max:500'],
         ];
     }

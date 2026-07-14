@@ -56,7 +56,7 @@ class OrderController extends Controller
         OrderStatusHistory::create([
             'order_id' => $order->id,
             'status' => $validated['status'],
-            'notes' => $validated['notes'] ?? 'Status diupdate oleh Admin',
+            'description' => $validated['notes'] ?? 'Status diupdate oleh Admin',
             'changed_at' => now(),
         ]);
 

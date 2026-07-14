@@ -53,6 +53,10 @@ class CheckoutController extends Controller
         $data = $this->checkoutService->getCheckoutData();
         $selectedAddress = $this->addressRepository->findById($addressId);
 
+        if ($selectedAddress && $selectedAddress->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to address');
+        }
+
         return view('checkout.shipping', [
             'cart' => $data['cart'],
             'selectedAddress' => $selectedAddress,
@@ -77,6 +81,11 @@ class CheckoutController extends Controller
 
         $data = $this->checkoutService->getCheckoutData();
         $selectedAddress = $this->addressRepository->findById(session('checkout.address_id'));
+        
+        if ($selectedAddress && $selectedAddress->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to address');
+        }
+
         $shippingCost = $this->orderService->calculateShipping($shippingMethod);
 
         return view('checkout.payment', [
@@ -99,7 +108,15 @@ class CheckoutController extends Controller
                 'shipping_method' => $request->validated('shipping_method'),
                 'payment_method' => $request->validated('payment_method'),
                 'notes' => $request->validated('notes'),
-                'address_snapshot' => $address?->formatted_address,
+                'address_snapshot' => $address ? json_encode([
+                    'recipient_name' => $address->recipient_name,
+                    'phone' => $address->phone,
+                    'street_address' => $address->full_address,
+                    'district' => $address->district,
+                    'city' => $address->city,
+                    'province' => $address->province,
+                    'postal_code' => $address->postal_code,
+                ]) : null,
             ]);
 
             // Clear checkout session
