@@ -59,15 +59,25 @@ class OrderService
                     'subtotal' => $cartItem->price * $cartItem->quantity,
                 ]);
 
-                // Decrease stock with lockForUpdate
+                // Decrease stock with lockForUpdate if not SQLite
                 if ($cartItem->variant) {
-                    $variant = \App\Models\ProductVariant::where('id', $cartItem->product_variant_id)->lockForUpdate()->first();
+                    $query = \App\Models\ProductVariant::where('id', $cartItem->product_variant_id);
+                    if (\Illuminate\Support\Facades\DB::connection()->getDriverName() !== 'sqlite') {
+                        $query->lockForUpdate();
+                    }
+                    $variant = $query->first();
+
                     if (!$variant || $variant->stock < $cartItem->quantity) {
                         throw new \RuntimeException("Stok varian {$cartItem->variant_name} tidak mencukupi.");
                     }
                     $variant->decrement('stock', $cartItem->quantity);
                 } else {
-                    $product = \App\Models\Product::where('id', $cartItem->product_id)->lockForUpdate()->first();
+                    $query = \App\Models\Product::where('id', $cartItem->product_id);
+                    if (\Illuminate\Support\Facades\DB::connection()->getDriverName() !== 'sqlite') {
+                        $query->lockForUpdate();
+                    }
+                    $product = $query->first();
+
                     if (!$product || $product->stock < $cartItem->quantity) {
                         throw new \RuntimeException("Stok produk {$cartItem->product_name} tidak mencukupi.");
                     }

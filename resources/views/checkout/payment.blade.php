@@ -35,6 +35,23 @@
                     <input type="hidden" name="address_id" value="{{ session('checkout.address_id') }}">
                     <input type="hidden" name="shipping_method" value="{{ $shippingMethod }}">
 
+                    @if($errors->any())
+                        <div class="mb-4 p-4 bg-red-50 text-red-600 rounded-lg">
+                            <ul class="list-disc pl-5">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    @if(session('error'))
+                        <div class="mb-4 p-4 bg-red-50 text-red-600 rounded-lg">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+
                     <div class="space-y-3 mb-6">
                         @foreach($paymentMethods as $method)
                             <label class="flex items-center gap-4 p-4 border border-gray-200 rounded-xl cursor-pointer hover:border-primary hover:shadow-card transition-all duration-200 has-[:checked]:border-primary has-[:checked]:bg-surface/50">
