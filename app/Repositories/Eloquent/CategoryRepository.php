@@ -14,12 +14,12 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function getAll(): Collection
     {
-        return $this->model->ordered()->get();
+        return $this->model->withCount(['products' => fn($q) => $q->where('is_active', true)])->ordered()->get();
     }
 
     public function getActive(): Collection
     {
-        return $this->model->active()->ordered()->get();
+        return $this->model->active()->withCount(['products' => fn($q) => $q->where('is_active', true)])->ordered()->get();
     }
 
     public function findBySlug(string $slug): ?Category

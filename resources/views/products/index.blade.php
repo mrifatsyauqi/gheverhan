@@ -236,7 +236,9 @@
                             <select name="category" class="w-full rounded-xl border-gray-300 focus:border-primary focus:ring-primary text-sm py-2">
                                 <option value="">Semua Kategori</option>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
+                                    <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>
+                                        {{ $category->name }} ({{ $category->products_count ?? 0 }})
+                                    </option>
                                 @endforeach
                             </select>
                         </div>

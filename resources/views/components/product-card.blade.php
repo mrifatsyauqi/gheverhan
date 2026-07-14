@@ -24,10 +24,10 @@
         @if($showWishlist)
             <button
                 onclick="window.toggleWishlist({{ $product->id }}, this, '{{ route('wishlist.toggle') }}', '{{ route('login') }}', {{ auth()->check() ? 'true' : 'false' }})"
-                class="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center
+                class="absolute top-2.5 right-2.5 w-6 h-6 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center
                        shadow-sm hover:bg-white hover:shadow-md transition-all duration-200 group/heart"
                 aria-label="Add to wishlist">
-                <svg class="w-4 h-4 transition-colors duration-200 {{ auth()->check() && auth()->user()->hasWishlisted($product->id) ? 'fill-red-500 text-red-500' : 'text-gray-500 group-hover/heart:text-red-500' }}"
+                <svg class="w-3.5 h-3.5 transition-colors duration-200 {{ auth()->check() && auth()->user()->hasWishlisted($product->id) ? 'fill-red-500 text-red-500' : 'text-gray-500 group-hover/heart:text-red-500' }}"
                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
                     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
                 </svg>
@@ -35,21 +35,17 @@
         @endif
     </div>
 
-    {{-- Product Info --}}
-    <div class="p-3 sm:p-4 flex-1 flex flex-col">
-        {{-- Category --}}
-        <p class="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider mb-1">{{ $product->category->name ?? '' }}</p>
-
+    <div class="p-3 flex-1 flex flex-col">
         {{-- Name --}}
         <a href="{{ route('products.show', $product->slug) }}">
-            <h3 class="text-xs sm:text-sm font-semibold text-primary leading-tight mb-1.5 line-clamp-2 group-hover:underline decoration-1 underline-offset-2">
+            <h3 class="text-xs sm:text-sm font-semibold text-primary leading-tight mb-1 truncate group-hover:underline decoration-1 underline-offset-2">
                 {{ $product->name }}
             </h3>
         </a>
 
         {{-- Rating --}}
         @if($product->rating > 0)
-            <div class="flex items-center gap-1 mb-1.5">
+            <div class="flex items-center gap-1 mb-2">
                 <x-rating :value="$product->rating" size="xs" />
                 <span class="text-[9px] text-gray-400">({{ $product->rating_count }})</span>
             </div>

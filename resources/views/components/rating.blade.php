@@ -8,6 +8,7 @@
     $halfStar = $value - $fullStars >= 0.5;
     $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
     $sizeClass = match($size) {
+        'xs' => 'w-2.5 h-2.5',
         'sm' => 'w-3 h-3',
         'md' => 'w-4 h-4',
         'lg' => 'w-5 h-5',
